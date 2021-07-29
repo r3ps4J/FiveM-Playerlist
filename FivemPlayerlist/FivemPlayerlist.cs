@@ -19,6 +19,7 @@ namespace FivemPlayerlist
         public struct PlayerRowConfig
         {
             public string crewName;
+            public int rankNumber;
             public int jobPoints;
             public bool showJobPointsIcon;
         }
@@ -40,7 +41,7 @@ namespace FivemPlayerlist
             Tick += UpdateHeadshots;
 
             EventHandlers.Add("fs:setMaxPlayers", new Action<int>(SetMaxPlayers));
-            EventHandlers.Add("fs:setPlayerConfig", new Action<int, string, int, bool>(SetPlayerConfig));
+            EventHandlers.Add("fs:setPlayerConfig", new Action<int, string, int, int, bool>(SetPlayerConfig));
         }
 
         /// <summary>
@@ -48,13 +49,15 @@ namespace FivemPlayerlist
         /// </summary>
         /// <param name="playerServerId"></param>
         /// <param name="crewname"></param>
+        /// <param name="ranknumber"></param>
         /// <param name="jobpoints"></param>
         /// <param name="showJPicon"></param>
-        private async void SetPlayerConfig(int playerServerId, string crewname, int jobpoints, bool showJPicon)
+        private async void SetPlayerConfig(int playerServerId, string crewname, int ranknumber, int jobpoints, bool showJPicon)
         {
             var cfg = new PlayerRowConfig()
             {
                 crewName = crewname ?? "",
+                rankNumber = ranknumber,
                 jobPoints = jobpoints,
                 showJobPointsIcon = showJPicon
             };
@@ -304,7 +307,7 @@ namespace FivemPlayerlist
                             jobPointsText = playerConfigs[p.ServerId].jobPoints >= 0 ? playerConfigs[p.ServerId].jobPoints.ToString() : "",
                             name = p.Name.Replace("<", "").Replace(">", "").Replace("^", "").Replace("~", "").Trim(),
                             rightIcon = (int)PlayerRow.RightIconType.RANK_FREEMODE,
-                            rightText = $"{p.ServerId}",
+                            rightText = playerConfigs[p.ServerId].rankNumber >= 0 ? playerConfigs[p.ServerId].rankNumber.ToString() : "", //$"{p.ServerId}",
                             serverId = p.ServerId,
                         };
                     }
@@ -320,7 +323,7 @@ namespace FivemPlayerlist
                             jobPointsText = "",
                             name = p.Name.Replace("<", "").Replace(">", "").Replace("^", "").Replace("~", "").Trim(),
                             rightIcon = (int)PlayerRow.RightIconType.RANK_FREEMODE,
-                            rightText = $"{p.ServerId}",
+                            rightText = "", //$"{p.ServerId}",
                             serverId = p.ServerId,
                         };
                     }

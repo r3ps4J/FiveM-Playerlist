@@ -3,7 +3,7 @@ GTA:O styled playerlist for FiveM servers (future proof: supports > 32 players).
 
 ### Preview:
 
-![](https://www.vespura.com/hi/i/2018-05-10_20-49_%25pn_2847cbc57cd7dffc8f.png)
+![](https://i.prntscr.com/cnTXLZpdTOioymEJD8rW4Q.png)
 
 ### Features:
 
@@ -27,7 +27,7 @@ There is no config file to change any of the "visual" settings for player rows. 
 
 To change the player's row settings, trigger this server event:
 ```lua
-TriggerEvent("fs:setPlayerRowConfig", 1, "SNAIL", 50, true)
+TriggerEvent("fs:setPlayerRowConfig", 1 --[[ player id ]], "SNAIL" --[[ crew tag ]], 12 --[[ rank number ]], 50 --[[ job points ]], true --[[ show job points icon ]])
 ```
 
 
@@ -37,6 +37,7 @@ TriggerEvent("fs:setPlayerRowConfig", 1, "SNAIL", 50, true)
 |:-|:-|:-|
 |_int_|**playerServerId**|This is the player's server id for the player you want to change the row of.|
 |_string_|**crewText**|The text to display for the "crew" tag behind the player's username. Pass an empty string (`""`) to disable the crew label.|
+|_int_|**rankNumber**|The number to display for the "rank" value. Set to -1 to disable.|
 |_int_|**jobPointsAmount**|The number to display for the "job points (jp)" value. Set to -1 to disable.|
 |_bool_|**showJobPointsIcon**|Should the "(JP)" icon be visible next to the job points number?|
 
@@ -58,3 +59,10 @@ When in-game, press "Z" to open the first page, press "Z" again to go to the nex
 For controller support, use DPAD-DOWN.
 
 Note, if other resources on your server disable the "Z" key or the "DPAD-DOWN" (`INPUT_MULTIPLAYER_INFO` / `20`) control, then you won't be able to toggle the playerlist.
+
+## This fork
+Here I will state the changes I made in this fork. The readme above is edited accordingly.
+- Added the possibility to change the rank number. This removed the player's server ID as rank number.
+
+### Credit
+All credit goes to [Tom Grobbe](https://github.com/TomGrobbe), I simply edited his work. You can find his original repository [here](https://github.com/DevTestingPizza/FiveM-Playerlist).

@@ -16,14 +16,14 @@ namespace FivemPlayerlistServer
         private Dictionary<int, dynamic[]> list = new Dictionary<int, dynamic[]>();
         public FPLServer()
         {
-            EventHandlers.Add("fs:getMaxPlayers", new Action<Player>(ReturnMaxPlayers));
+            EventHandlers.Add("fs:getServerInfo", new Action<Player>(ReturnServerInfo));
             Exports.Add("setPlayerRowConfig", new Action<string, string, string, string, string>(SetPlayerConfig2));
             EventHandlers.Add("fs:setPlayerRowConfig", new Action<int, string, int, int, bool>(SetPlayerConfig));
         }
 
-        private async void ReturnMaxPlayers([FromSource] Player source)
+        private async void ReturnServerInfo([FromSource] Player source)
         {
-            source.TriggerEvent("fs:setMaxPlayers", int.Parse(GetConvar("sv_maxClients", "30").ToString()));
+            source.TriggerEvent("fs:setServerInfo", GetConvarInt("sv_maxClients", 30), GetConvar("sv_projectName", "FiveM"), GetConvar("sv_serverType", "Public"));
             var pl = new PlayerList();
             foreach (Player p in pl)
             {

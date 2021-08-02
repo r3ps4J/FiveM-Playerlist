@@ -12,6 +12,8 @@ namespace FivemPlayerlist
     public class FivemPlayerlist : BaseScript
     {
         private int maxClients = -1;
+        private string projectName = "FiveM";
+        private string serverType = "Public";
         private bool ScaleSetup = false;
         private int currentPage = 0;
         Scaleform scale;
@@ -32,7 +34,7 @@ namespace FivemPlayerlist
         /// </summary>
         public FivemPlayerlist()
         {
-            TriggerServerEvent("fs:getMaxPlayers");
+            TriggerServerEvent("fs:getServerInfo");
             Tick += ShowScoreboard;
             Tick += DisplayController;
             Tick += BackupTimer;
@@ -40,7 +42,7 @@ namespace FivemPlayerlist
             // Periodically update the player headshots so, you don't have to wait for them later
             Tick += UpdateHeadshots;
 
-            EventHandlers.Add("fs:setMaxPlayers", new Action<int>(SetMaxPlayers));
+            EventHandlers.Add("fs:setServerInfo", new Action<int, string, string>(SetServerInfo));
             EventHandlers.Add("fs:setPlayerConfig", new Action<int, string, int, int, bool>(SetPlayerConfig));
         }
 
@@ -146,9 +148,11 @@ namespace FivemPlayerlist
         /// Updates the max players (triggered from server event)
         /// </summary>
         /// <param name="count"></param>
-        private void SetMaxPlayers(int count)
+        private void SetServerInfo(int count, string name, string type)
         {
             maxClients = count;
+            projectName = name;
+            serverType = type;
         }
 
         /// <summary>
@@ -207,8 +211,9 @@ namespace FivemPlayerlist
             }
             scale = new Scaleform("MP_MM_CARD_FREEMODE");
             var titleIcon = "2";
-            var titleLeftText = "FiveM";
-            var titleRightText = $"Players {NetworkGetNumConnectedPlayers()}/{maxClients}";
+            var titleServerType = serverType != "" ? $"{serverType}, " : "";
+            var titleLeftText = $"{projectName} ({titleServerType}{NetworkGetNumConnectedPlayers()})";
+            var titleRightText = maxPages >= 2 ? $"({currentPage}/{maxPages})" : "";
             scale.CallFunction("SET_TITLE", titleLeftText, titleRightText, titleIcon);
             await UpdateScale();
             scale.CallFunction("DISPLAY_VIEW");
